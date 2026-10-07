@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Injector,
   afterNextRender,
   inject,
   output,
@@ -55,6 +56,7 @@ export class CreateSurveyDialog {
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
   private redirectTimer: ReturnType<typeof setTimeout> | undefined;
 
   protected readonly categories = SURVEY_CATEGORIES;
@@ -65,6 +67,7 @@ export class CreateSurveyDialog {
   protected readonly answerMaxLength = MAX_ANSWER_LENGTH;
   protected readonly isSaving = signal<boolean>(false);
   protected readonly saveError = signal<string>('');
+  protected readonly submitAttempted = signal<boolean>(false);
   protected readonly publishedSurveyId = signal<string>('');
   protected readonly today = new Date().toISOString().slice(0, 10);
   protected readonly showsError = showsError;
@@ -143,11 +146,31 @@ export class CreateSurveyDialog {
     }
   }
 
+  protected get missingFields(): string[] {
+    const { title, category, endDate } = this.form.controls;
+    return [
+      ...(title.invalid ? ['Please enter a survey name.'] : []),
+      ...(category.invalid ? ['Please choose a category.'] : []),
+      ...(endDate.invalid ? ['The end date must not be in the past.'] : []),
+      ...this.questions.controls.flatMap((question, index) =>
+        this.missingInQuestion(question, index + 1),
+      ),
+    ];
+  }
+
   protected async publish(): Promise<void> {
     this.form.markAllAsTouched();
-    if (this.form.invalid || this.isSaving()) {
+    this.submitAttempted.set(true);
+    if (this.form.invalid) {
+      this.revealMissingFields();
       return;
     }
+    if (!this.isSaving()) {
+      await this.save();
+    }
+  }
+
+  private async save(): Promise<void> {
     this.isSaving.set(true);
     try {
       this.publishedSurveyId.set(await this.surveyService.createSurvey(this.buildSurvey()));
@@ -156,6 +179,28 @@ export class CreateSurveyDialog {
       this.saveError.set('The survey could not be saved. Please try again.');
       this.isSaving.set(false);
     }
+  }
+
+  private missingInQuestion(question: QuestionGroup, number: number): string[] {
+    const missing = question.controls.text.invalid
+      ? [`Question ${number}: please enter the question.`]
+      : [];
+    question.controls.answers.controls.forEach((answer, index) => {
+      if (answer.invalid) {
+        missing.push(`Question ${number}: please fill in answer ${toLetter(index)}.`);
+      }
+    });
+    return missing;
+  }
+
+  private revealMissingFields(): void {
+    afterNextRender(
+      () =>
+        this.elementRef.nativeElement
+          .querySelector<HTMLElement>('.dialog__missing')
+          ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }),
+      { injector: this.injector },
+    );
   }
 
   private cancelRedirect(): void {

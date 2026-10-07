@@ -67,11 +67,15 @@
             [locked]="isLocked()"
             [isSubmitting]="isSubmitting()"
             (submitted)="vote($event)"
+            (selectionChanged)="pendingSelection.set($event)"
           />
         </article>
 
         <aside>
-          <app-survey-results [survey]="currentSurvey" />
+          <app-survey-results
+            [survey]="currentSurvey"
+            [pending]="isLocked() ? {} : pendingSelection()"
+          />
         </aside>
       </div>
     } @else if (survey() === null) {

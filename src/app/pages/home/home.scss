@@ -289,7 +289,6 @@
     padding-bottom: 0.5rem;
     margin-bottom: 2.5rem;
     scroll-padding-inline: 1rem;
-    scrollbar-width: none;
     margin-inline: -1rem;
     padding-inline: 1rem;
     overflow-x: auto;
@@ -298,10 +297,27 @@
   }
 
   .card-grid--featured::-webkit-scrollbar {
-    display: none;
+    height: 0.5rem;
+  }
+
+  .card-grid--featured::-webkit-scrollbar-track {
+    margin-inline: 1rem;
+    background: transparent;
+  }
+
+  .card-grid--featured::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 0.25rem;
   }
 
   .card-grid--featured li {
     scroll-snap-align: start;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    .card-grid--featured {
+      scrollbar-color: var(--color-accent) transparent;
+      scrollbar-width: thin;
+    }
   }
 }

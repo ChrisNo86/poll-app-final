@@ -22,7 +22,7 @@ Poll App is a real-time survey application built with Angular and Firebase. User
 - **Active / past surveys:** tabs switch between running and finished surveys, each with its own category filter.
 - **Create survey:** overlay dialog with title, category, optional end date, optional description and any number of questions with 2 to 6 answers. After publishing, a confirmation is shown and the app returns to the home page after 3 seconds.
 - **Voting:** one vote per survey and browser. Expired and already voted surveys are read-only.
-- **Live results:** percentage bars per question, updated in real time through Firestore snapshots. On mobile the results can be folded away.
+- **Live results:** percentage bars per question, updated in real time through Firestore snapshots. Selecting an answer is previewed in the results right away, and the vote is saved only when the survey is completed. On mobile the results can be folded away.
 - **Validation:** messages appear inside the input fields, so the layout never shifts.
 - **Seed data:** an empty database is filled with example surveys on the first start.
 
@@ -109,7 +109,7 @@ npm run build
 
 To deploy under a subfolder, set the base path, for example `ng build --base-href /poll-app/`.
 
-The `.htaccess` in `public/` forwards all routes to `index.html` on Apache servers, so reloading a survey page does not return a 404.
+The app uses hash routing (`/#/survey/<id>`), so reloading a page works on any static host without server rewrite rules.
 
 ## 🗂️ Project structure
 

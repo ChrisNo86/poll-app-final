@@ -26,6 +26,7 @@ export class SurveyDetail {
 
   protected readonly formatDate = formatDate;
   protected readonly isSubmitting = signal<boolean>(false);
+  protected readonly pendingSelection = signal<Selection>({});
   protected readonly submitError = signal<string>('');
   protected readonly survey = toSignal(
     toObservable(this.id).pipe(switchMap((id) => this.surveyService.watchSurvey(id))),
@@ -45,6 +46,7 @@ export class SurveyDetail {
     try {
       await this.surveyService.submitVotes(this.id(), selection);
       this.hasVotedNow.set(true);
+      this.pendingSelection.set({});
     } catch {
       this.submitError.set('Your vote could not be saved. Please try again.');
     }

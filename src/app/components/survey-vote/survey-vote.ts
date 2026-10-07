@@ -13,6 +13,7 @@ export class SurveyVote {
   readonly locked = input<boolean>(false);
   readonly isSubmitting = input<boolean>(false);
   readonly submitted = output<Selection>();
+  readonly selectionChanged = output<Selection>();
 
   protected readonly toLetter = toLetter;
   private readonly selection = signal<Selection>({});
@@ -32,6 +33,7 @@ export class SurveyVote {
     const current = this.selection()[question.id] ?? [];
     const next = this.computeSelection(question, current, answerId);
     this.selection.update((selection) => ({ ...selection, [question.id]: next }));
+    this.selectionChanged.emit(this.selection());
   }
 
   protected submit(event: Event): void {

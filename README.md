@@ -50,7 +50,7 @@ Poll App is a real-time survey application built with Angular and Firebase. User
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/ChrisNo86/poll-app-final.git
+   git clone <your-repository-url>
    ```
 
 2. Navigate to the project directory:
@@ -109,7 +109,7 @@ npm run build
 
 To deploy under a subfolder, set the base path, for example `ng build --base-href /poll-app/`.
 
-The `.htaccess` in `public/` forwards all routes to `index.html` on Apache servers, so reloading a survey page does not return a 404.
+The app uses hash routing (`/#/survey/<id>`), so reloading a page works on any static host without server rewrite rules.
 
 ## 🗂️ Project structure
 
@@ -138,5 +138,5 @@ Votes are stored per survey as `votes["<questionId>_<answerId>"]` and counted wi
 
 ## ✍️ Author
 
-- Christian Noack (CN Security & Systems)
+- Chris Noack (CN Security & Systems)
 - [Website](https://christian-noack.com)

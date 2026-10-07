@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  color: var(--color-bg);
+  background: var(--color-bg-light);
+}
+
+.detail__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 43.8125rem) minmax(0, 19.75rem);
+  column-gap: 2.625rem;
+  align-items: start;
+  padding: 0.375rem 0 4rem;
+}
+
+.panel {
+  padding: 2.5rem;
+  background: var(--color-panel-light);
+  border-top-right-radius: 10rem;
+}
+
+.panel__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .badge {
+    margin: 0;
+  }
+}
+
+.panel__close {
+  display: none;
+}
+
+.panel__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-right: 0.875rem;
+  margin-top: -0.3125rem;
+  font-size: 0.875rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.panel__title {
+  margin: 0.625rem 0 0.625rem;
+  font-size: 3.5rem;
+  line-height: 0.89;
+  color: var(--color-heading-strong);
+}
+
+.panel__description {
+  margin: 0 0 2.4375rem;
+  line-height: 1.25rem;
+}
+
+.notice {
+  padding: 0.75rem 1rem;
+  margin: 0 0 2rem;
+  background: var(--color-accent-pill);
+  border-radius: 0.5rem;
+}
+
+.notice--error {
+  color: var(--color-error);
+}
+
+@media (max-width: 900px) {
+  .detail__create {
+    display: none;
+  }
+
+  .detail__layout {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 3rem;
+    padding-top: 1.875rem;
+  }
+
+  .panel {
+    padding: 2.5rem 0.6875rem 2.5rem 0.875rem;
+    border-top-right-radius: 6.25rem;
+  }
+
+  .panel__top {
+    min-height: 2rem;
+  }
+
+  .panel__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4375rem;
+    height: 2rem;
+    margin-right: 0.75rem;
+    color: var(--color-bg);
+    background: var(--color-accent-soft);
+    border-radius: 0.625rem;
+    transition: background-color 0.15s ease;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &:focus-visible {
+      background: var(--color-accent);
+    }
+  }
+
+  .panel__meta {
+    flex-wrap: wrap;
+    row-gap: 0.125rem;
+    padding-right: 0;
+    margin-top: 0.9375rem;
+    white-space: nowrap;
+  }
+
+  .panel__title {
+    margin: 1.125rem 0 1.5rem;
+    font-size: 3rem;
+    line-height: 0.875;
+  }
+
+  .panel__description {
+    margin-bottom: 2.3125rem;
+  }
+}

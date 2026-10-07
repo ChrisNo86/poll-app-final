@@ -1,0 +1,131 @@
+.survey-card {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  background: var(--color-card-dark);
+  border-top-right-radius: 3rem;
+  transition: background-color 0.15s ease;
+
+  &:focus-visible {
+    background: var(--color-card-dark-hover);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: var(--color-card-dark-hover);
+    }
+  }
+}
+
+.survey-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5625rem;
+  min-height: 8.125rem;
+  height: 100%;
+  padding: 0.6875rem 1.25rem 0.75rem 1.1875rem;
+}
+
+.survey-card__category {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  color: var(--color-accent-soft);
+}
+
+.survey-card__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.survey-card__deadline {
+  align-self: flex-end;
+  padding: 0 0.4375rem;
+  margin: auto 0 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  color: var(--color-bg);
+  background: var(--color-accent-soft);
+  border-top-right-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+}
+
+.survey-card--featured {
+  min-height: 19.375rem;
+  color: var(--color-bg);
+  background: var(--color-card-light);
+  border-top-right-radius: 5rem;
+
+  &:focus-visible {
+    background: var(--color-card-light-hover);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: var(--color-card-light-hover);
+    }
+  }
+
+  &:focus-visible .survey-card__deadline {
+    background: var(--color-accent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .survey-card__deadline {
+      background: var(--color-accent);
+    }
+  }
+
+  .survey-card__content {
+    gap: 0.375rem;
+    min-height: 19.375rem;
+    padding: 2.5rem 2.6875rem 3.75rem;
+  }
+
+  .survey-card__category {
+    font-size: 0.875rem;
+    line-height: 1.25;
+    color: var(--color-bg);
+  }
+
+  .survey-card__title {
+    font-size: 1.625rem;
+    line-height: 1.3;
+  }
+
+  .survey-card__deadline {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 1000px) {
+  .survey-card__content {
+    min-height: 9.375rem;
+    padding-right: 1rem;
+    padding-left: 1.3125rem;
+  }
+
+  .survey-card__title {
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .survey-card--featured,
+  .survey-card--featured .survey-card__content {
+    min-height: 14.5625rem;
+  }
+
+  .survey-card--featured .survey-card__content {
+    padding: 1.4375rem 0.9375rem 1.625rem;
+  }
+
+  .survey-card--featured .survey-card__title {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+}

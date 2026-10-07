@@ -1,0 +1,302 @@
+<div class="backdrop" (click)="close()"></div>
+
+<section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+  <header class="dialog__header">
+    <p class="badge badge--draft">Draft</p>
+    <button type="button" class="dialog__cancel" (click)="close()">
+      <span class="dialog__cancel-label">Cancel</span>
+      <svg class="dialog__cancel-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M5 5l14 14M19 5L5 19"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span class="visually-hidden">Close dialog</span>
+    </button>
+    <h2 id="dialog-title" class="display-title">Create new survey</h2>
+    <p class="dialog__legend">
+      <span class="required-mark" aria-hidden="true">*</span> Required field
+    </p>
+  </header>
+
+  <form class="form" [formGroup]="form" (ngSubmit)="publish()" novalidate>
+    <div class="form__panel">
+      <div class="form__intro">
+        <div class="field form__name">
+          <label for="survey-title"
+            >Survey name <span class="required-mark" aria-hidden="true">*</span></label
+          >
+          <div class="field__row">
+            <input
+              id="survey-title"
+              type="text"
+              formControlName="title"
+              required
+              aria-required="true"
+              [maxlength]="titleMaxLength"
+              [placeholder]="showsError(form.controls.title) ? 'Please enter a survey name.' : ''"
+            />
+            <button
+              type="button"
+              class="icon-button"
+              aria-label="Clear survey name"
+              (click)="clearField(form.controls.title)"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M9 3a1 1 0 0 0-1 1v1H4.5a1 1 0 0 0 0 2H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7h.5a1 1 0 1 0 0-2H16V4a1 1 0 0 0-1-1H9Zm1 2h4V5h-4v0Zm-3 2h10v13H7V7Zm3 2a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Z"
+                />
+              </svg>
+            </button>
+          </div>
+          @if (showsError(form.controls.title)) {
+            <p class="field__error" role="alert">Please enter a survey name.</p>
+          }
+        </div>
+
+        <div class="form__subrow">
+          <div class="field field--inline form__category">
+            <label for="survey-category" class="visually-hidden">Choose category</label>
+            <select
+              id="survey-category"
+              class="plain-select"
+              formControlName="category"
+              required
+              aria-required="true"
+            >
+              <option value="" disabled>
+                {{ showsError(form.controls.category) ? 'Pick a category' : 'Choose category' }}
+              </option>
+              @for (category of categories; track category) {
+                <option [value]="category">{{ category }}</option>
+              }
+            </select>
+            @if (showsError(form.controls.category)) {
+              <p class="field__error" role="alert">Please choose a category.</p>
+            }
+          </div>
+
+          <div class="field form__enddate">
+            <label for="survey-end-date"
+              >Set end date
+              @if (showsError(form.controls.endDate)) {
+                <span class="field__flag">(in the past)</span>
+              } @else {
+                <span class="optional">(optional)</span>
+              }
+            </label>
+            <div class="field__row">
+              <input id="survey-end-date" type="date" formControlName="endDate" [min]="today" />
+              <button
+                type="button"
+                class="icon-button"
+                aria-label="Clear end date"
+                (click)="clearField(form.controls.endDate)"
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M9 3a1 1 0 0 0-1 1v1H4.5a1 1 0 0 0 0 2H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7h.5a1 1 0 1 0 0-2H16V4a1 1 0 0 0-1-1H9Zm1 2h4V5h-4v0Zm-3 2h10v13H7V7Zm3 2a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Z"
+                  />
+                </svg>
+              </button>
+            </div>
+            @if (showsError(form.controls.endDate)) {
+              <p class="field__error" role="alert">The end date must be in the future.</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="field form__description">
+        <label for="survey-description"
+          >Describing text <span class="optional">(optional)</span></label
+        >
+        <div class="field__row field__row--top">
+          <textarea
+            id="survey-description"
+            formControlName="description"
+            rows="6"
+            [maxlength]="descriptionMaxLength"
+          ></textarea>
+          <button
+            type="button"
+            class="icon-button"
+            aria-label="Clear description"
+            (click)="clearField(form.controls.description)"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M9 3a1 1 0 0 0-1 1v1H4.5a1 1 0 0 0 0 2H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7h.5a1 1 0 1 0 0-2H16V4a1 1 0 0 0-1-1H9Zm1 2h4V5h-4v0Zm-3 2h10v13H7V7Zm3 2a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div formArrayName="questions" class="questions form__questions">
+        @for (question of questions.controls; track $index; let questionIndex = $index) {
+          <fieldset class="question" [formGroupName]="questionIndex">
+            <legend class="question__legend">
+              <span
+                >{{ questionIndex + 1 }}. Question
+                <span class="required-mark" aria-hidden="true">*</span></span
+              >
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-label]="
+                  questionIndex === 0
+                    ? 'Clear question 1'
+                    : 'Remove question ' + (questionIndex + 1)
+                "
+                (click)="questionIndex === 0 ? clearQuestion(0) : removeQuestion(questionIndex)"
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M9 3a1 1 0 0 0-1 1v1H4.5a1 1 0 0 0 0 2H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7h.5a1 1 0 1 0 0-2H16V4a1 1 0 0 0-1-1H9Zm1 2h4V5h-4v0Zm-3 2h10v13H7V7Zm3 2a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Z"
+                  />
+                </svg>
+              </button>
+            </legend>
+
+            <input
+              type="text"
+              formControlName="text"
+              [maxlength]="questionMaxLength"
+              required
+              aria-required="true"
+              [attr.aria-label]="'Question ' + (questionIndex + 1)"
+              [placeholder]="
+                showsError(question.controls.text)
+                  ? 'Please enter the question.'
+                  : 'Which date would work best for you?'
+              "
+            />
+            @if (showsError(question.controls.text)) {
+              <p class="field__error" role="alert">Please enter the question.</p>
+            }
+
+            <div class="answers-header">
+              <span
+                >Answers <span class="required-mark" aria-hidden="true">*</span>
+                <span class="optional">(at least 2)</span></span
+              >
+              <label class="checkbox">
+                <input type="checkbox" formControlName="allowMultiple" />
+                Allow multiple answers.
+              </label>
+            </div>
+
+            <ul class="answers" formArrayName="answers">
+              @for (
+                answer of answersOf(question).controls;
+                track $index;
+                let answerIndex = $index
+              ) {
+                <li class="answer">
+                  <label [for]="'answer-' + questionIndex + '-' + answerIndex"
+                    >{{ toLetter(answerIndex) }}.</label
+                  >
+                  <input
+                    [id]="'answer-' + questionIndex + '-' + answerIndex"
+                    type="text"
+                    [formControlName]="answerIndex"
+                    [maxlength]="answerMaxLength"
+                    required
+                    aria-required="true"
+                    [placeholder]="showsError(answer) ? 'Please enter an answer.' : ''"
+                  />
+                  <button
+                    type="button"
+                    class="icon-button"
+                    [disabled]="answersOf(question).length <= 2"
+                    [attr.aria-label]="'Remove answer ' + toLetter(answerIndex)"
+                    (click)="removeAnswer(question, answerIndex)"
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M9 3a1 1 0 0 0-1 1v1H4.5a1 1 0 0 0 0 2H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7h.5a1 1 0 1 0 0-2H16V4a1 1 0 0 0-1-1H9Zm1 2h4V5h-4v0Zm-3 2h10v13H7V7Zm3 2a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1Z"
+                      />
+                    </svg>
+                  </button>
+                  @if (showsError(answer)) {
+                    <p class="field__error" role="alert">Please enter an answer.</p>
+                  }
+                </li>
+              }
+            </ul>
+
+            @if (answersOf(question).length < maxAnswers) {
+              <div class="answers-footer">
+                <button type="button" class="link-button" (click)="addAnswer(question)">
+                  Add answer
+                  <svg class="icon-inline-plus" viewBox="154 106 20 20" aria-hidden="true">
+                    <path
+                      fill="currentColor"
+                      d="M163 117V120C163 120.283 163.096 120.521 163.288 120.713C163.479 120.904 163.717 121 164 121C164.283 121 164.521 120.904 164.713 120.713C164.904 120.521 165 120.283 165 120V117H168C168.283 117 168.521 116.904 168.713 116.713C168.904 116.521 169 116.283 169 116C169 115.717 168.904 115.479 168.713 115.288C168.521 115.096 168.283 115 168 115H165V112C165 111.717 164.904 111.479 164.713 111.287C164.521 111.096 164.283 111 164 111C163.717 111 163.479 111.096 163.288 111.287C163.096 111.479 163 111.717 163 112V115H160C159.717 115 159.479 115.096 159.287 115.288C159.096 115.479 159 115.717 159 116C159 116.283 159.096 116.521 159.287 116.713C159.479 116.904 159.717 117 160 117H163ZM164 126C162.617 126 161.317 125.737 160.1 125.212C158.883 124.688 157.825 123.975 156.925 123.075C156.025 122.175 155.312 121.117 154.788 119.9C154.262 118.683 154 117.383 154 116C154 114.617 154.262 113.317 154.788 112.1C155.312 110.883 156.025 109.825 156.925 108.925C157.825 108.025 158.883 107.312 160.1 106.788C161.317 106.262 162.617 106 164 106C165.383 106 166.683 106.262 167.9 106.788C169.117 107.312 170.175 108.025 171.075 108.925C171.975 109.825 172.688 110.883 173.212 112.1C173.737 113.317 174 114.617 174 116C174 117.383 173.737 118.683 173.212 119.9C172.688 121.117 171.975 122.175 171.075 123.075C170.175 123.975 169.117 124.688 167.9 125.212C166.683 125.737 165.383 126 164 126ZM164 124C166.233 124 168.125 123.225 169.675 121.675C171.225 120.125 172 118.233 172 116C172 113.767 171.225 111.875 169.675 110.325C168.125 108.775 166.233 108 164 108C161.767 108 159.875 108.775 158.325 110.325C156.775 111.875 156 113.767 156 116C156 118.233 156.775 120.125 158.325 121.675C159.875 123.225 161.767 124 164 124Z"
+                    />
+                  </svg>
+                </button>
+                <p class="hint">You can add up to 6 answer fields.</p>
+              </div>
+            }
+          </fieldset>
+        }
+        <button
+          type="button"
+          class="button button--muted form__addquestion"
+          (click)="addQuestion()"
+        >
+          Add next question
+          <svg class="icon-inline-plus" viewBox="154 106 20 20" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M163 117V120C163 120.283 163.096 120.521 163.288 120.713C163.479 120.904 163.717 121 164 121C164.283 121 164.521 120.904 164.713 120.713C164.904 120.521 165 120.283 165 120V117H168C168.283 117 168.521 116.904 168.713 116.713C168.904 116.521 169 116.283 169 116C169 115.717 168.904 115.479 168.713 115.288C168.521 115.096 168.283 115 168 115H165V112C165 111.717 164.904 111.479 164.713 111.287C164.521 111.096 164.283 111 164 111C163.717 111 163.479 111.096 163.288 111.287C163.096 111.479 163 111.717 163 112V115H160C159.717 115 159.479 115.096 159.287 115.288C159.096 115.479 159 115.717 159 116C159 116.283 159.096 116.521 159.287 116.713C159.479 116.904 159.717 117 160 117H163ZM164 126C162.617 126 161.317 125.737 160.1 125.212C158.883 124.688 157.825 123.975 156.925 123.075C156.025 122.175 155.312 121.117 154.788 119.9C154.262 118.683 154 117.383 154 116C154 114.617 154.262 113.317 154.788 112.1C155.312 110.883 156.025 109.825 156.925 108.925C157.825 108.025 158.883 107.312 160.1 106.788C161.317 106.262 162.617 106 164 106C165.383 106 166.683 106.262 167.9 106.788C169.117 107.312 170.175 108.025 171.075 108.925C171.975 109.825 172.688 110.883 173.212 112.1C173.737 113.317 174 114.617 174 116C174 117.383 173.737 118.683 173.212 119.9C172.688 121.117 171.975 122.175 171.075 123.075C170.175 123.975 169.117 124.688 167.9 125.212C166.683 125.737 165.383 126 164 126ZM164 124C166.233 124 168.125 123.225 169.675 121.675C171.225 120.125 172 118.233 172 116C172 113.767 171.225 111.875 169.675 110.325C168.125 108.775 166.233 108 164 108C161.767 108 159.875 108.775 158.325 110.325C156.775 111.875 156 113.767 156 116C156 118.233 156.775 120.125 158.325 121.675C159.875 123.225 161.767 124 164 124Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    @if (saveError()) {
+      <p class="field__error" role="alert">{{ saveError() }}</p>
+    }
+
+    <button type="submit" class="button dialog__submit" [disabled]="isSaving()">
+      Publish
+      <svg class="button__icon button__icon--check" viewBox="152 180 18 16" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M158.156 192.508L168.021 180.428C168.254 180.143 168.526 180 168.836 180C169.146 180 169.418 180.143 169.651 180.428C169.884 180.713 170 181.051 170 181.443C170 181.835 169.884 182.174 169.651 182.459L158.97 195.572C158.738 195.857 158.466 196 158.156 196C157.845 196 157.574 195.857 157.341 195.572L152.335 189.443C152.102 189.158 151.991 188.82 152.001 188.428C152.01 188.036 152.132 187.697 152.364 187.412C152.597 187.127 152.874 186.984 153.194 186.984C153.514 186.984 153.79 187.127 154.023 187.412L158.156 192.508Z"
+        />
+      </svg>
+    </button>
+  </form>
+
+  @if (publishedSurveyId()) {
+    <div class="confirmation" role="alertdialog" aria-labelledby="confirmation-title">
+      <button type="button" class="confirmation__close" aria-label="Close" (click)="close()">
+        <svg viewBox="0 0 14 14" aria-hidden="true">
+          <path
+            d="M1 1L13 13M13 1L1 13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+      <p id="confirmation-title" class="display-title confirmation__title">
+        Your survey is now published!
+      </p>
+    </div>
+  }
+</section>

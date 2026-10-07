@@ -1,0 +1,46 @@
+<section class="results" [class.results--collapsed]="!open()" aria-labelledby="results-title">
+  <button
+    type="button"
+    class="results__toggle"
+    [attr.aria-expanded]="open()"
+    aria-controls="results-content"
+    (click)="toggle()"
+  >
+    {{ open() ? 'Close results' : 'See results' }}
+    <span class="results__chevron" aria-hidden="true"></span>
+  </button>
+
+  <div id="results-content" class="results__content">
+    <h2 id="results-title" class="display-title results__title">
+      Survey results <span class="results__live">LIVE</span>
+    </h2>
+
+    <div aria-live="polite">
+      @for (question of survey().questions; track question.id; let questionIndex = $index) {
+        <article class="result">
+          <h3 class="result__question">
+            <span class="result__number">{{ questionIndex + 1 }}.</span>{{ question.text }}
+          </h3>
+          <ul class="result__list">
+            @for (answer of question.answers; track answer.id; let answerIndex = $index) {
+              <li class="result__row">
+                <span class="result__letter">{{ toLetter(answerIndex) }}</span>
+                <span class="result__track" aria-hidden="true">
+                  <span
+                    class="result__bar"
+                    [style.width.%]="percentOf(question, answer.id)"
+                    [style.min-width.px]="percentOf(question, answer.id) > 0 ? 9 : 0"
+                  ></span>
+                </span>
+                <span class="result__percent">
+                  <span class="visually-hidden">{{ answer.text }}:</span>
+                  {{ percentOf(question, answer.id) }}%
+                </span>
+              </li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </div>
+</section>

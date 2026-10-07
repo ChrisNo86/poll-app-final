@@ -1,0 +1,32 @@
+<div class="dropdown">
+  <button
+    type="button"
+    class="dropdown__trigger"
+    [class.dropdown__trigger--open]="isOpen()"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="listbox"
+    (click)="toggle()"
+  >
+    Sort by categories
+    <span class="dropdown__chevron" aria-hidden="true"></span>
+  </button>
+
+  @if (isOpen()) {
+    <ul class="dropdown__panel" role="listbox" aria-label="Sort by categories">
+      @for (category of categories(); track category) {
+        <li>
+          <button
+            type="button"
+            class="dropdown__option"
+            [class.dropdown__option--selected]="category === selected()"
+            role="option"
+            [attr.aria-selected]="category === selected()"
+            (click)="choose(category)"
+          >
+            {{ category }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

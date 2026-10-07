@@ -1,0 +1,68 @@
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 2.4375rem 2rem;
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+
+  &:focus-visible {
+    opacity: 0.85;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+.site-header__logo {
+  flex: none;
+  width: 4.3125rem;
+  height: auto;
+}
+
+.site-header__bubble {
+  fill: var(--color-accent);
+}
+
+.site-header__dot,
+.site-header__bar {
+  fill: #290657;
+  fill-opacity: 0.3;
+}
+
+.site-header__wordmark {
+  font-size: 1.625rem;
+  line-height: 0.615;
+  letter-spacing: 0.03em;
+}
+
+.site-header--dark {
+  .site-header__bubble {
+    fill: var(--color-bg);
+  }
+
+  .site-header__dot,
+  .site-header__bar {
+    fill: var(--color-accent-soft);
+    fill-opacity: 1;
+  }
+
+  .site-header__wordmark {
+    color: var(--color-bg);
+  }
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    padding-block: 3rem 1.4375rem;
+  }
+}

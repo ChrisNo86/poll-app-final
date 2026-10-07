@@ -138,5 +138,5 @@ Votes are stored per survey as `votes["<questionId>_<answerId>"]` and counted wi
 
 ## ✍️ Author
 
-- Chris Noack (CN Security & Systems)
+- Christian Noack (CN Security & Systems)
 - [Website](https://christian-noack.com)

@@ -50,7 +50,7 @@ Poll App is a real-time survey application built with Angular and Firebase. User
 1. Clone the repository:
 
    ```bash
-   git clone <your-repository-url>
+   git clone https://github.com/ChrisNo86/poll-app-final.git
    ```
 
 2. Navigate to the project directory:

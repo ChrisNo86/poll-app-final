@@ -1,47 +1,35 @@
 .hero {
   display: grid;
+  /* The heading is forced onto exactly 2 lines (see the <br> in home.html, matching
+     Figma's "Collect Feedback," / "Unlock Ideas" split). A fr-based column can shrink
+     narrower than the heading's actual rendered width (font metrics differ slightly
+     from Figma's own text engine), which would wrap "Collect Feedback," onto a 3rd
+     line. max-content sizes the column to fit the nowrap heading exactly, at any
+     viewport width, instead of guessing a fixed px/fr value. */
   grid-template-columns: max-content minmax(0, 1fr);
-  column-gap: 2rem;
-  grid-template-rows: auto auto auto 1fr;
-  grid-template-areas:
-    'heading illustration'
-    'lead illustration'
-    'button illustration'
-    '. illustration';
-  padding-block: 3.5rem 6.125rem;
+  align-items: center;
+  gap: 2rem;
+  padding-block: 3rem 5rem;
 }
 
 #hero-title {
-  grid-area: heading;
   white-space: nowrap;
 }
 
-.hero-break--mobile {
-  display: none;
-}
-
 .hero__lead {
-  grid-area: lead;
   max-width: 41.625rem;
-  margin: 1.4375rem 0 2.5625rem;
+  margin: 1.5rem 0 2rem;
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 1.25;
-}
-
-.hero__cta {
-  grid-area: button;
-  justify-self: start;
+  line-height: 1;
 }
 
 .hero__illustration {
   position: relative;
-  grid-area: illustration;
   width: 100%;
-  max-width: 26.25rem;
+  max-width: 26rem;
   aspect-ratio: 1 / 1;
-  justify-self: start;
-  margin-left: 0.625rem;
+  justify-self: center;
 }
 
 .hero__image {
@@ -51,91 +39,61 @@
   height: 100%;
 }
 
-.hero__image--mobile {
-  display: none;
-}
-
+/* The Figma prototype's hover interaction on this illustration is a plain cross-fade
+   ("Auflösen"/dissolve, 250ms, ease-in-out) between two fully-rendered variants of the
+   artwork — not a per-badge transform. In the hover variant all four decorations (speech
+   bubble, question mark, star, checkmark) are bigger, each exported directly from Figma,
+   so we replicate it the same way: two full illustrations stacked, cross-fading.
+   Both layers animate opacity (base fades out as hover fades in) — a one-way fade-in over
+   a static base leaves the small base-state badges visible as a "ghost" through the
+   transparent edges of the larger hover badges, which Figma's real dissolve does not show. */
 .hero__image--base,
 .hero__image--hover {
-  backface-visibility: hidden;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity;
+  transition: opacity 0.25s ease-in-out;
 }
 
 .hero__image--hover {
   opacity: 0;
 }
 
+.hero__illustration:hover .hero__image--hover,
 .hero__illustration:focus-within .hero__image--hover {
   opacity: 1;
 }
 
+.hero__illustration:hover .hero__image--base,
 .hero__illustration:focus-within .hero__image--base {
   opacity: 0;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .hero__illustration:hover .hero__image--hover {
-    opacity: 1;
-  }
-
-  .hero__illustration:hover .hero__image--base {
-    opacity: 0;
-  }
-}
-
-.surveys {
-  padding-inline: 5.5rem;
-}
-
 .surveys__title {
-  margin: 0 0 3.5625rem;
+  margin: 0 0 3rem;
   font-size: 4.5rem;
   line-height: 1;
   text-align: center;
 }
 
 .surveys__subtitle {
-  margin: 0 0 2.1875rem;
+  margin: 0 0 1.5rem;
   font-size: 2rem;
   font-weight: 400;
 }
 
 .card-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
   padding: 0;
-  margin: 0 0 2.25rem;
+  margin: 0 0 3rem;
   list-style: none;
 }
 
 .card-grid--featured {
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding-inline: 0.5rem;
+  gap: 2.5rem;
 }
 
 .card-grid--list {
   grid-template-columns: repeat(2, 1fr);
-  max-height: 26.375rem;
-  padding-right: 1.625rem;
-  margin-right: -1.625rem;
-  overflow-y: auto;
-  scrollbar-color: var(--color-accent) transparent;
-  scrollbar-width: thin;
-}
-
-.card-grid--list::-webkit-scrollbar {
-  width: 0.5rem;
-}
-
-.card-grid--list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.card-grid--list::-webkit-scrollbar-thumb {
-  background: var(--color-accent);
-  border-radius: 0.25rem;
 }
 
 .toolbar {
@@ -144,46 +102,35 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 2.3125rem;
+  margin-bottom: 1.5rem;
 }
 
 .tabs {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .tab {
-  padding: 0.16rem 0.6rem;
+  padding: 0.2rem 0.9rem;
   font: inherit;
-  line-height: 1.25rem;
-  color: var(--color-bg);
+  color: var(--color-text-dark);
   cursor: pointer;
   background: var(--color-accent-pill);
   border: 0;
   border-radius: 1rem;
   transition: background-color 0.15s ease;
 
+  &:hover,
   &:focus-visible {
     background: var(--color-accent-soft);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background: var(--color-accent-soft);
-    }
   }
 
   &[aria-pressed='true'] {
     background: var(--color-accent);
 
+    &:hover,
     &:focus-visible {
       background: var(--color-accent);
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      &:hover {
-        background: var(--color-accent);
-      }
     }
   }
 }
@@ -197,98 +144,31 @@
 @media (max-width: 1000px) {
   .hero {
     grid-template-columns: 1fr;
-    grid-template-rows: none;
-    grid-template-areas:
-      'heading'
-      'illustration'
-      'lead'
-      'button';
-    padding-block: 1.75rem 5.5rem;
+    padding-block: 1rem 3rem;
   }
 
   #hero-title {
     white-space: normal;
   }
 
-  .hero-break--mobile {
-    display: inline;
-  }
-
-  .hero__lead {
-    margin: 0 0 3.3125rem;
-    font-size: 1.125rem;
-    line-height: 1.28;
-  }
-
-  .hero__cta {
-    justify-self: center;
-    background: var(--color-accent);
-  }
-
   .hero__illustration {
-    aspect-ratio: 343 / 250;
-    max-width: 21.4375rem;
-    margin: 1.5rem auto;
-    justify-self: center;
-  }
-
-  .hero__image--base,
-  .hero__image--hover {
-    display: none;
-  }
-
-  .hero__image--mobile {
-    position: static;
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .surveys {
-    padding-inline: 0;
+    max-width: 18rem;
   }
 
   .surveys__title {
-    margin-bottom: 2.5625rem;
-    font-size: 3.375rem;
-  }
-
-  .surveys__subtitle {
-    margin: 0 0 1.0625rem 0.125rem;
-    font-size: 1.5rem;
-  }
-
-  .toolbar {
-    gap: 3rem 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .tabs {
-    gap: 1rem;
-  }
-
-  .tab {
-    font-size: 0.875rem;
-    line-height: 1.125rem;
+    font-size: 2.5rem;
   }
 
   .card-grid--list {
     grid-template-columns: 1fr;
-    gap: 0.95rem;
-    max-height: none;
-    padding-right: 0;
-    margin-right: 0;
-    overflow-y: visible;
   }
 
   .card-grid--featured {
     grid-auto-flow: column;
-    grid-auto-columns: 15.625rem;
+    grid-auto-columns: 82%;
     grid-template-columns: none;
     gap: 1rem;
     padding-bottom: 0.5rem;
-    margin-bottom: 2.5rem;
-    scroll-padding-inline: 1rem;
     margin-inline: -1rem;
     padding-inline: 1rem;
     overflow-x: auto;
@@ -296,31 +176,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .card-grid--featured::-webkit-scrollbar {
-    height: 0.5rem;
-  }
-
-  .card-grid--featured::-webkit-scrollbar-track {
-<<<<<<< HEAD
-    margin-inline: 1rem;
-=======
->>>>>>> cc2e322cbd5ee8b3a04e1303a56fd0ad5499ac72
-    background: transparent;
-  }
-
-  .card-grid--featured::-webkit-scrollbar-thumb {
-    background: var(--color-accent);
-    border-radius: 0.25rem;
-  }
-
   .card-grid--featured li {
     scroll-snap-align: start;
-  }
-
-  @supports not selector(::-webkit-scrollbar) {
-    .card-grid--featured {
-      scrollbar-color: var(--color-accent) transparent;
-      scrollbar-width: thin;
-    }
   }
 }

@@ -163,6 +163,12 @@ export class CreateSurveyDialog {
     this.submitAttempted.set(true);
     if (this.form.invalid) {
       this.revealMissingFields();
+<<<<<<< HEAD
+=======
+      return;
+    }
+    if (this.isSaving()) {
+>>>>>>> cc2e322cbd5ee8b3a04e1303a56fd0ad5499ac72
       return;
     }
     if (!this.isSaving()) {
